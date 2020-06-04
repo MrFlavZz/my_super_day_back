@@ -6,7 +6,18 @@ var logger = require('morgan');
 var cors = require('cors');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var testAPIRouter = require("./routes/trajet");
+var trajetRouter = require("./routes/trajet");
+var biorythmeRouter = require("./routes/biorythme");
+var horoscopeRouter = require("./routes/horoscope");
+var traducteurRouter = require("./routes/traducteur");
+var agendaRouter = require("./routes/agenda");
+var calculatriceRouter =require("./routes/calculatrice");
+var blocNotesRouter = require("./routes/blocNotes");
+var meteoRouter = require("./routes/meteo");
+var bourseRouter = require("./routes/bourse");
+
+
+
 
 var app = express();
 
@@ -24,7 +35,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use("/trajet", testAPIRouter);
+app.use("/trajet", trajetRouter);
+app.use("/biorythme", biorythmeRouter);
+app.use("/horoscope", horoscopeRouter);
+app.use("/traducteur", trajetRouter);
+app.use("/agenda", agendaRouter);
+app.use("/calculatrice", calculatriceRouter);
+app.use("/blocNotes", blocNotesRouter);
+app.use("/meteo", meteoRouter);
+app.use("/bourse",bourseRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
