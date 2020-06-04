@@ -4,6 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+
+
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var trajetRouter = require("./routes/trajet");
@@ -15,6 +18,7 @@ var calculatriceRouter =require("./routes/calculatrice");
 var blocNotesRouter = require("./routes/blocNotes");
 var meteoRouter = require("./routes/meteo");
 var bourseRouter = require("./routes/bourse");
+
 
 
 
