@@ -38,7 +38,7 @@ app.use('/users', usersRouter);
 app.use("/trajet", trajetRouter);
 app.use("/biorythme", biorythmeRouter);
 app.use("/horoscope", horoscopeRouter);
-app.use("/traducteur", trajetRouter);
+app.use("/traducteur", traducteurRouter);
 app.use("/agenda", agendaRouter);
 app.use("/calculatrice", calculatriceRouter);
 app.use("/blocNotes", blocNotesRouter);
