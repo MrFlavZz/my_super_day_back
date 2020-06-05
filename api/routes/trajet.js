@@ -1,9 +1,10 @@
-require('dotenv').config();
 var express = require("express");
 var router = express.Router();
 var fetch = require('node-fetch')
 
 const googleKey = process.env.GOOGLE_KEY;
+console.log(process.env.CACA)
+
 
 router.get('/',async function (req, res) {
     console.log(process.env.CACA)
@@ -17,8 +18,12 @@ router.get('/',async function (req, res) {
     const processData = async () => {
         const dataGetter = await getData()
         const responseData = await dataGetter.json()
-        let data = (responseData.results[0].geometry.location)
-        res.send(data)
+        let data = {
+            latitude: responseData.results[0].geometry.location.lat,
+
+            longitude: responseData.results[0].geometry.location.lng
+        };
+        await res.json(data)
     }
 
     if (address === undefined){
