@@ -11,19 +11,21 @@ router.post('/',async function (req, res) {
     const translate = new Translate();
     const text = req.body.text;
     const target = req.body.langCible;
-
+    let traduction = ''
     async function translateText() {
         // Translates the text into the target language. "text" can be a string for
         // translating a single piece of text, or an array of strings for translating
         // multiple texts.
         let [translations] = await translate.translate(text, target);
         translations = Array.isArray(translations) ? translations : [translations];
-        console.log('Translations:');
         translations.forEach((translation, i) => {
-            res.json({
-                text:translations
-            });
+            traduction=translation
         });
+        console.log(traduction)
+        await res.json({
+            trad:traduction
+            }
+        );
     }
 
     translateText();

@@ -3,11 +3,9 @@ var router = express.Router();
 var fetch = require('node-fetch')
 
 const googleKey = process.env.GOOGLE_KEY;
-console.log(process.env.CACA)
 
 
 router.get('/',async function (req, res) {
-    console.log(process.env.CACA)
     let address=req.query.address;
     console.log(address)
 
