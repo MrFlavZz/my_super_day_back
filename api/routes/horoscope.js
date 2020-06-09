@@ -60,7 +60,7 @@ router.get('/', async function (req, res) {
         await res.json(data)
     }
 
-    if (signe === undefined && temps) {
+    if (signe === undefined && temps === undefined) {
         res.sendStatus(404);
     } else {
         await processData()

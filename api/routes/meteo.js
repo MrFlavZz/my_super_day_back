@@ -7,22 +7,47 @@ const meteoKey = process.env.METEO_KEY;
 router.get('/',async function (req, res) {
 
 
-    let lat = '50.7088633'
-    let lng = '3.1801746'
+    let lat = req.query.lat
+    let lng = req.query.lng
 
 
 
     function getData() {
-        return fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&&appid=${meteoKey}
-`)
+        return fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&&appid=${meteoKey}`)
     }
 
     const processData = async () => {
         const dataGetter = await getData()
         const responseData = await dataGetter.json()
+
+
         let data = {
-            /*TODO : trier info */
+            current: {
+                temperature: responseData.current.temp,
+                temperatureFeels : responseData.current.feels_like,
+                humidity:responseData.current.humidity,
+                cloud:responseData.current.clouds,
+                uv:responseData.current.uvi,
+                windSpeed:responseData.current.wind_speed,
+            },
         };
+
+        data.daily = [];
+        for(let i =0;i<responseData.daily.length; i++){
+            data.daily.push({
+                temperature:responseData.daily[i].temp,
+                temperatureFeels:responseData.daily[i].feels_like,
+                humidity:responseData.daily[i].humidity,
+                cloud:responseData.daily[i].clouds,
+                uv:responseData.daily[i].uvi,
+                windSpeed:responseData.daily[i].wind_speed,
+            });
+
+
+
+
+        }
+
         await res.json(data)
     }
 
