@@ -5,6 +5,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+const db = require("./models");
+var fetch = require('node-fetch')
 
 
 
@@ -38,7 +40,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+app.use('/mysuperday/', indexRouter);
 app.use('/users', usersRouter);
 app.use("/trajet", trajetRouter);
 app.use("/biorythme", biorythmeRouter);
@@ -54,6 +56,23 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+const requestOptions = {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body : JSON.stringify( {
+    username : "lolc",
+    email:'pipaic@lol.com',
+    password: 'coucou'
+  }),
+
+};
+
+fetch(`http://localhost:9000/users/signin`, requestOptions)
+    .then(response =>{response.json()
+        .then(data => {
+         console.log(data)
+        })
+    })
 
 // error handler
 app.use(function(err, req, res, next) {
