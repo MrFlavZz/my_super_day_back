@@ -56,25 +56,12 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-const requestOptions = {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body : JSON.stringify( {
-    username : "lolc",
-    email:'pipaic@lol.com',
-    password: 'coucou'
-  }),
 
-};
 
-fetch(`http://localhost:9000/users/signin`, requestOptions)
-    .then(response =>{response.json()
-        .then(data => {
-         console.log(data)
-        })
-    })
 
-// error handler
+
+
+
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
