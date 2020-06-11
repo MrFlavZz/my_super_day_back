@@ -20,7 +20,6 @@ router.post('/signin', controller.signin
 
 router.post('/getAutocomplete' ,async function (req, res) {
     let address = req.body.address;
-    console.log(googleKey)
 
     function getData() {
         return fetch(`https://maps.googleapis.com/maps/api/place/queryautocomplete/json?&key=${googleKey}&input=${address}`)
