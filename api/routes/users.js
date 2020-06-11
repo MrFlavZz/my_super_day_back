@@ -5,10 +5,11 @@ const {verifySignUp} = require('../middleware/index');
 const controller = require('../controllers/aut.controller');
 var fetch = require('node-fetch')
 const googleKey = process.env.GOOGLE_KEY;
+
 router.post('/signup',  [
         verifySignUp.checkDuplicateUsernameOrEmail,
     ],
-    
+
     controller.signup
 
 
