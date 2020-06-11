@@ -7,12 +7,12 @@ var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
-    console.log(req.body.birthDate)
+    // Save User to Database
     User.create({
         username: req.body.username,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
-        birthDate: req.body.birthDate,
+        dateOfBirth: req.body.dateOfBirth,
         homeAddress: req.body.homeAddress,
         workAddress:req.body.workAddress,
     })
