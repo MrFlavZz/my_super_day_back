@@ -11,7 +11,10 @@ exports.signup = (req, res) => {
     User.create({
         username: req.body.username,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: bcrypt.hashSync(req.body.password, 8),
+        dateOfBirth: req.body.dateOfBirth,
+        homeAddress: req.body.homeAddress,
+        workAddress:req.body.workAddress,
     })
         .catch(err => {
             res.status(500).send({ message: err.message });

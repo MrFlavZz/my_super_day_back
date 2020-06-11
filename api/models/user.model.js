@@ -15,13 +15,13 @@ module.exports = (sequelize, Sequelize) => {
         password: {
             type: Sequelize.STRING
         },
-        adresse_domicile: {
+        homeAddress: {
             type: Sequelize.STRING
         },
-        adresse_travail: {
+        workAddress: {
             type: Sequelize.STRING,
         },
-        birth_date: {
+        birthDate: {
             type: Sequelize.DATE,
         }
     });
