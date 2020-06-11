@@ -8,13 +8,15 @@ const googleKey = process.env.GOOGLE_KEY;
 router.post('/signup',  [
         verifySignUp.checkDuplicateUsernameOrEmail,
     ],
+    
     controller.signup
+
+
 
 
 );
 
 router.post('/signin', controller.signin
-
 );
 
 

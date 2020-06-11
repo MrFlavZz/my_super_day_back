@@ -40,17 +40,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/mysuperday/', indexRouter);
-app.use('/users', usersRouter);
-app.use("/trajet", trajetRouter);
-app.use("/biorythme", biorythmeRouter);
-app.use("/horoscope", horoscopeRouter);
-app.use("/traducteur", traducteurRouter);
-app.use("/agenda", agendaRouter);
-app.use("/calculatrice", calculatriceRouter);
-app.use("/blocNotes", blocNotesRouter);
-app.use("/meteo", meteoRouter);
-app.use("/bourse",bourseRouter);
+app.use('/mysuperday', indexRouter);
+app.use('/mysuperday/users', usersRouter);
+app.use("/mysuperday/trajet", trajetRouter);
+app.use("/mysuperday/biorythme", biorythmeRouter);
+app.use("/mysuperday/horoscope", horoscopeRouter);
+app.use("/mysuperday/traducteur", traducteurRouter);
+app.use("/mysuperday/agenda", agendaRouter);
+app.use("/mysuperday/calculatrice", calculatriceRouter);
+app.use("/mysuperday/blocNotes", blocNotesRouter);
+app.use("/mysuperday/meteo", meteoRouter);
+app.use("/mysuperday/bourse",bourseRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

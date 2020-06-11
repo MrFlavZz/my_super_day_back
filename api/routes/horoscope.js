@@ -6,7 +6,6 @@ var fetch = require('node-fetch')
 router.get('/', async function (req, res) {
     let temps = req.query.temps;
     let signe = req.query.signe
-    console.log(signe)
 
 
     switch (signe) {
@@ -41,11 +40,6 @@ router.get('/', async function (req, res) {
             res.sendStatus(404);
 
     }
-
-    console.log(temps)
-    console.log(signe)
-
-
 
     function getData() {
         return fetch(`http://horoscope-api.herokuapp.com/horoscope/${temps}/${signe}`)
