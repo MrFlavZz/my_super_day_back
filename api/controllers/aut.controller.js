@@ -28,8 +28,9 @@ exports.signin = (req, res) => {
         }
     })
         .then(user => {
+            console.log(user)
             if (!user) {
-                return res.status(404).send({message: "User Not found."});
+                return res.status(404).send({message: "Nom de compte ou mot de passe invalide"});
             }
 
             var passwordIsValid = bcrypt.compareSync(
@@ -40,14 +41,14 @@ exports.signin = (req, res) => {
             if (!passwordIsValid) {
                 return res.status(401).send({
                     accessToken: null,
-                    message: "Invalid Password!"
+                    message: "Nom de compte ou mot de passe invalide"
                 });
             }
 
             var token = jwt.sign({id: user.id}, config.secret, {
                 expiresIn: 86400 // 24 hours
             });
-            console.log(jwt.verify(token,config.secret));
+
 
             res.status(200).send({
                 id: user.id,
