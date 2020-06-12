@@ -8,7 +8,6 @@ var bcrypt = require("bcryptjs");
 
 exports.signup = (req, res) => {
     // Save User to Database
-    console.log(req.body.da)
     User.create({
         username: req.body.username,
         email: req.body.email,
@@ -29,7 +28,6 @@ exports.signin = (req, res) => {
         }
     })
         .then(user => {
-            console.log(user)
             if (!user) {
                 return res.status(404).send({message: "Nom de compte ou mot de passe invalide"});
             }

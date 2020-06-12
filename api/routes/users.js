@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 const {verifySignUp} = require('../middleware/index');
+const {authJwt} = require('../middleware/index');
 const controller = require('../controllers/aut.controller');
 var fetch = require('node-fetch')
 const googleKey = process.env.GOOGLE_KEY;
@@ -11,9 +12,11 @@ router.post('/signup',  [
     ],
 
     controller.signup
+);
 
-
-
+router.get('/verifyToken',  [
+    authJwt.verifyToken,
+    ],
 
 );
 
