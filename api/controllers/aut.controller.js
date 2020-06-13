@@ -19,6 +19,9 @@ exports.signup = (req, res) => {
         .catch(err => {
             res.status(500).send({ message: "Erreur interne du serveur" });
         });
+    res.json({
+        isCreated:true
+    })
 };
 
 exports.signin = (req, res) => {

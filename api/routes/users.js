@@ -30,6 +30,7 @@ router.post('/signin', controller.signin
 
 
 router.post('/getAutocomplete', async function (req, res) {
+
     let address = req.body.address;
 
     function getData() {
@@ -45,6 +46,7 @@ router.post('/getAutocomplete', async function (req, res) {
         for (let i = 0; i < responseData.predictions.length; i++) {
             data.predictions.push(responseData.predictions[i].description)
         }
+
         await res.json(data)
     }
 
