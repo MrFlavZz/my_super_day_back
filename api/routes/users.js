@@ -7,24 +7,29 @@ const controller = require('../controllers/aut.controller');
 var fetch = require('node-fetch')
 const googleKey = process.env.GOOGLE_KEY;
 
-router.post('/signup',  [
+router.post('/signup', [
         verifySignUp.checkDuplicateUsernameOrEmail,
     ],
 
     controller.signup
 );
 
-router.get('/verifyToken',  [
-    authJwt.verifyToken,
-    ],
+router.get('/verifyToken', [
+        authJwt.verifyToken,
+    ], async function (req, res) {
+        res.json({
+            isConnected: true
+        })
 
+    }
 );
+
 
 router.post('/signin', controller.signin
 );
 
 
-router.post('/getAutocomplete' ,async function (req, res) {
+router.post('/getAutocomplete', async function (req, res) {
     let address = req.body.address;
 
     function getData() {
@@ -35,17 +40,17 @@ router.post('/getAutocomplete' ,async function (req, res) {
         const dataGetter = await getData()
         const responseData = await dataGetter.json()
         let data = {
-            predictions : []
+            predictions: []
         }
-        for (let i = 0 ; i<responseData.predictions.length;i++){
+        for (let i = 0; i < responseData.predictions.length; i++) {
             data.predictions.push(responseData.predictions[i].description)
         }
         await res.json(data)
     }
 
-    if (address === undefined){
+    if (address === undefined) {
         res.status(404);
-    }else{
+    } else {
         await processData()
         res.end
     }
