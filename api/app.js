@@ -40,17 +40,17 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/mysuperday', indexRouter);
-app.use('/mysuperday/users', usersRouter);
-app.use("/mysuperday/trajet", trajetRouter);
-app.use("/mysuperday/biorythme", biorythmeRouter);
-app.use("/mysuperday/horoscope", horoscopeRouter);
-app.use("/mysuperday/traducteur", traducteurRouter);
-app.use("/mysuperday/agenda", agendaRouter);
-app.use("/mysuperday/calculatrice", calculatriceRouter);
-app.use("/mysuperday/blocNotes", blocNotesRouter);
-app.use("/mysuperday/meteo", meteoRouter);
-app.use("/mysuperday/bourse",bourseRouter);
+
+app.use('/mysuperday/api/users', usersRouter);
+app.use("/mysuperday/api/trajet", trajetRouter);
+app.use("/mysuperday/api/biorythme", biorythmeRouter);
+app.use("/mysuperday/api/horoscope", horoscopeRouter);
+app.use("/mysuperday/api/traducteur", traducteurRouter);
+app.use("/mysuperday/api/agenda", agendaRouter);
+app.use("/mysuperday/api/calculatrice", calculatriceRouter);
+app.use("/mysuperday/api/blocNotes", blocNotesRouter);
+app.use("/mysuperday/api/meteo", meteoRouter);
+app.use("/mysuperday/api/bourse",bourseRouter);
 
 
 

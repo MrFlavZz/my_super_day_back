@@ -20,6 +20,10 @@ exports.signup = async (req, res) => {
             res.status(500).send({ message: "Erreur interne du serveur" });
         });
 
+    res.send({
+        message: "Compte créer"
+    })
+
 };
 
 exports.signin = (req, res) => {

@@ -1,11 +1,11 @@
 module.exports = {
     HOST: "localhost",
     USER: "root",
-    PASSWORD: "CBISEN1597F7",
-    DB: "mysuperday",
-    dialect: "mysql2",
+    PASSWORD: "",
+    DB: "test",
+    dialect: "mysql",
     dialectOptions : {
-      socketPath : "/srv/run/mysqld/mysqld.sock"
+        socketPath : "/srv/run/mysqld/mysqld.sock"
     },
     pool: {
         max: 30,
