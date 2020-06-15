@@ -6,9 +6,9 @@ const User = db.user;
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res) => {
     // Save User to Database
-    User.create({
+    await User.create({
         username: req.body.username,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8),
@@ -19,9 +19,7 @@ exports.signup = (req, res) => {
         .catch(err => {
             res.status(500).send({ message: "Erreur interne du serveur" });
         });
-    res.json({
-        isCreated:true
-    })
+
 };
 
 exports.signin = (req, res) => {

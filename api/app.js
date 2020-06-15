@@ -51,13 +51,6 @@ app.use("/mysuperday/calculatrice", calculatriceRouter);
 app.use("/mysuperday/blocNotes", blocNotesRouter);
 app.use("/mysuperday/meteo", meteoRouter);
 app.use("/mysuperday/bourse",bourseRouter);
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
-
-
-
 
 
 
