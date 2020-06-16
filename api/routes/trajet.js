@@ -5,7 +5,7 @@ var fetch = require('node-fetch')
 const googleKey = process.env.GOOGLE_KEY;
 
 
-router.get('/',async function (req, res) {
+router.get('/coordinate',async function (req, res) {
     let address=req.query.address;
     console.log(address)
 
@@ -33,4 +33,43 @@ router.get('/',async function (req, res) {
 
 })
 
+router.get('/infotrajet',async function (req, res) {
+    let origin=req.query.origin;
+    let destination=req.query.destination;
+
+
+    function getData() {
+        return fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${origin}&destinations=${destination}&key=${googleKey}`)
+    }
+
+    const processData = async () => {
+        const dataGetter = await getData()
+        const responseData = await dataGetter.json()
+        let data = {
+            origin:responseData.origin_addresses[0],
+            destination:responseData.destination_addresses[0],
+
+            itinerary:{
+                distance:{
+                    value:responseData.rows[0].elements[0].distance.value,
+                    text:responseData.rows[0].elements[0].distance.text,
+
+                },
+                duration:{
+                    value:responseData.rows[0].elements[0].duration.value,
+                    text:responseData.rows[0].elements[0].duration.text,
+
+                },
+            },
+        };
+        await res.json(data)
+    }
+    if (origin === undefined || destination === undefined){
+        res.status(404);
+    }else{
+        await processData()
+        res.end
+    }
+
+})
 module.exports = router

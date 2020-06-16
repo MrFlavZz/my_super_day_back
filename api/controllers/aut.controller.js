@@ -21,7 +21,7 @@ exports.signup = async (req, res) => {
         });
 
     res.send({
-        message: "Compte créer"
+        message: "Compte créé"
     })
 
 };

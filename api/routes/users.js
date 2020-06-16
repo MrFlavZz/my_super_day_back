@@ -17,6 +17,7 @@ router.post('/signup', [
 router.get('/verifyToken', [
         authJwt.verifyToken,
     ], async function (req, res) {
+
         res.json({
             isConnected: true
         })

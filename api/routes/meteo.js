@@ -6,13 +6,22 @@ const meteoKey = process.env.METEO_KEY;
 
 router.get('/',async function (req, res) {
 
+    let address=req.query.address;
+    let lat = ""
+    let lng = ""
 
-    let lat = req.query.lat
-    let lng = req.query.lng
+    async function getData() {
 
 
 
-    function getData() {
+
+        const getter = await fetch(`http://localhost:9000/mysuperday/api/trajet/coordinate?address=${address}`)
+        const response = await getter.json()
+
+        lat = response.latitude;
+        lng=response.longitude;
+        console.log((lat))
+
         return fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&&appid=${meteoKey}`)
     }
 
@@ -29,6 +38,12 @@ router.get('/',async function (req, res) {
                 cloud:responseData.current.clouds,
                 uv:responseData.current.uvi,
                 windSpeed:responseData.current.wind_speed,
+                weather:
+                    {
+                        main:responseData.current.weather[0].main,
+                        description: responseData.current.weather[0].description,
+                    }
+
             },
         };
 
@@ -41,6 +56,11 @@ router.get('/',async function (req, res) {
                 cloud:responseData.daily[i].clouds,
                 uv:responseData.daily[i].uvi,
                 windSpeed:responseData.daily[i].wind_speed,
+                weather: {
+                        main:responseData.daily[i].weather[0].main,
+                        description: responseData.daily[i].weather[0].description,
+                    }
+
             });
 
 
@@ -51,7 +71,7 @@ router.get('/',async function (req, res) {
         await res.json(data)
     }
 
-    if (lat === undefined || lng === undefined){
+    if (address === undefined){
         res.send(404);
     }else{
         await processData()
