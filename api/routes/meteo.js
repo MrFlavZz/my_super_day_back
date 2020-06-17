@@ -43,6 +43,7 @@ router.get('/', async function (req, res) {
                 weather: {
                     main: responseData.daily[i].weather[0].main,
                     description: responseData.daily[i].weather[0].description,
+                    icon:responseData.daily[i].weather[0].icon,
                 }
 
             });
