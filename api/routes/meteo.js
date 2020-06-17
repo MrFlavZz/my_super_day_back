@@ -18,7 +18,6 @@ router.get('/', async function (req, res) {
 
         lat = response.latitude;
         lng = response.longitude;
-        console.log((lat))
 
         return fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&&appid=${meteoKey}`)
     }
@@ -29,24 +28,11 @@ router.get('/', async function (req, res) {
 
 
         let data = {
-            current: {
-                temperature: responseData.current.temp,
-                temperatureFeels: responseData.current.feels_like,
-                humidity: responseData.current.humidity,
-                cloud: responseData.current.clouds,
-                uv: responseData.current.uvi,
-                windSpeed: responseData.current.wind_speed,
-                weather:
-                    {
-                        main: responseData.current.weather[0].main,
-                        description: responseData.current.weather[0].description,
-                    }
 
-            },
         };
 
         data.daily = [];
-        for (let i = 0; i < responseData.daily.length; i++) {
+        for (let i = 0; i < 7; i++) {
             data.daily.push({
                 temperature: responseData.daily[i].temp,
                 temperatureFeels: responseData.daily[i].feels_like,
