@@ -34,11 +34,11 @@ router.get('/coordinate',async function (req, res) {
 
 })
 
-router.get('/infotrajet',async function (req, res) {
-    let origin=req.query.origin;
-    let destination=req.query.destination;
-
-
+router.post('/infotrajet',async function (req, res) {
+    let origin=req.body.origin;
+    let destination=req.body.destination;
+    console.log(origin)
+    console.log(destination)
     function getData() {
         return fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${origin}&destinations=${destination}&key=${googleKey}`)
     }

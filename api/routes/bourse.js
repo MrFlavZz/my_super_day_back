@@ -2,7 +2,6 @@ var express = require("express");
 var router = express.Router();
 var fetch = require('node-fetch')
 
-const meteoKey = process.env.METEO_KEY;
 
 router.get('/',async function (req, res) {
 
