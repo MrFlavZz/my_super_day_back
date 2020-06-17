@@ -13,7 +13,8 @@ router.get('/', async function (req, res) {
     async function getData() {
 
 
-        const getter = await fetch(`https://bdoalex.com/mysuperday/api/trajet/coordinate?address=${address}`)
+        const getter = await fetch(encodeURI(`https://bdoalex.com/mysuperday/api/trajet/coordinate?address=${address}`))
+
         const response = await getter.json()
 
         lat = response.latitude;

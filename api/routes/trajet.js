@@ -7,13 +7,14 @@ const googleKey = process.env.GOOGLE_KEY;
 
 router.get('/coordinate',async function (req, res) {
     let address=req.query.address;
-    console.log(address)
+
 
     function getData() {
         return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleKey}`)
     }
 
     const processData = async () => {
+
         const dataGetter = await getData()
         const responseData = await dataGetter.json()
         let data = {
