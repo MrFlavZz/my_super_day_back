@@ -21,7 +21,6 @@ router.post('/',async function (req, res) {
         translations.forEach((translation, i) => {
             traduction=translation
         });
-        console.log(traduction)
         await res.json({
             trad:traduction
             }

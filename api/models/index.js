@@ -8,7 +8,7 @@ const sequelize = new Sequelize(
     {
         host: config.HOST,
         dialect: config.dialect,
-        dialectOptions:config.dialectOptions,
+
 
         pool: {
             max: config.pool.max,
@@ -24,6 +24,8 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.user = require("../models/user.model.js")(sequelize, Sequelize);
+db.variable = require("./Calculator/variable")(sequelize, Sequelize);
+db.function = require("./Calculator/function")(sequelize, Sequelize);
 
 
 module.exports = db;
