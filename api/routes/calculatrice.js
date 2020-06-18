@@ -7,7 +7,7 @@ const Function = db.function;
 
 
 /* GET home page. */
-router.post('/getVariableFunction', [authJwt.verifyToken,], async function (req, res, next) {
+router.post('/getVariableFunction', [authJwt.verifyToken], async function (req, res, next) {
     let result = {
         variables: [],
         functions: [],

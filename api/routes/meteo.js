@@ -4,9 +4,9 @@ var fetch = require('node-fetch')
 
 const meteoKey = process.env.METEO_KEY;
 
-router.get('/', async function (req, res) {
+router.post('/getParticularTown', async function (req, res) {
 
-    let address = req.query.address;
+    let address = req.body.address;
     let lat = ""
     let lng = ""
 
