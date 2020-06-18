@@ -15,14 +15,16 @@ exports.signup = async (req, res) => {
         birthDate: req.body.birthDate,
         homeAddress: req.body.homeAddress,
         workAddress:req.body.workAddress,
+    }).then((res)=>{
+        res.send({
+            message: "Compte créé"
+        })
     })
         .catch(err => {
             res.status(500).send({ message: "Erreur interne du serveur" });
         });
 
-    res.send({
-        message: "Compte créé"
-    })
+
 
 };
 
