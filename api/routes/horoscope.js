@@ -1,65 +1,71 @@
 var express = require("express");
 var router = express.Router();
 var fetch = require('node-fetch')
+const db = require("../models/index");
+const {authJwt} = require('../middleware/index');
+const Horoscope=db.horoscope;
+const moment = require('moment')
 
 
-router.get('/', async function (req, res) {
-    let temps = req.query.temps;
-    let signe = req.query.signe
+router.get('/getAllType', async function (req, res) {
+
+    var today = moment().format('DD/MM/YYYY')
+    console.log(today)
+    Horoscope.findOne({
+        where:{
+            date : today,
+        }
+    }).then(async (horoscope) => {
+
+        if(horoscope==null){
+            const signe =["aries","taurus","gemini","cancer","leo","virgo","libra","scorpio","sagittarius"];
+
+            const result = await getData()
+
+            async function getData() {
+                let result =[]
+                for (const elem of signe){
+                    await fetch(`http://horoscope-api.herokuapp.com/horoscope/today/${elem}`).then((res)=>{
+                        return res.json()
+                    }).then((data)=>{
+                        result.push(data)
+                    })
+
+                }
+                return result
+            }
+            console.log(result)
+            Horoscope.create({
+                aries:result[0].horoscope,
+                taurus: result[1].horoscope,
+                gemini: result[2].horoscope,
+                cancer: result[3].horoscope,
+                leo: result[4].horoscope,
+                virgo: result[5].horoscope,
+                libra: result[6].horoscope,
+                scorpio:result[7].horoscope,
+                sagittarius: result[8].horoscope,
+                date: today,
+            })
 
 
-    switch (signe) {
-        case 'belier':
-            signe = "aries";
-            break;
-        case 'taureau':
-            signe = "taurus";
-            break;
-        case 'gemeaux':
-            signe = "gemini";
-            break;
-        case'cancer':
-            signe = "cancer";
-            break;
-        case 'lion':
-            signe = "leo";
-            break;
-        case 'vierge':
-            signe = "virgo";
-            break;
-        case'balance':
-            signe = "libra";
-            break;
-        case'scorpion':
-            signe = "scorpio";
-            break;
-        case 'sagittaire':
-            signe = "Sagittarius";
-            break;
-        default:
-            res.sendStatus(404);
+            res.send({
+                result
+            });
+        }
+        else {
+            res.send({
+                horoscope : horoscope.dataValues
+            })
+        }
+    }).catch((e) => {
+        console.log(e)
+        res.status(500).send({message: "Erreur interne du serveur"})
+    })
 
-    }
 
-    function getData() {
-        return fetch(`http://horoscope-api.herokuapp.com/horoscope/${temps}/${signe}`)
-    }
 
-    const processData = async () => {
-        const dataGetter = await getData()
-        const responseData = await dataGetter.json()
-        let data = {
-            horoscope:responseData.horoscope
-        };
-        await res.json(data)
-    }
 
-    if (signe === undefined && temps === undefined) {
-        res.sendStatus(404);
-    } else {
-        await processData()
-        res.end
-    }
 
 })
 

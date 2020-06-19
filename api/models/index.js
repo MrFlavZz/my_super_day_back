@@ -25,6 +25,8 @@ db.user = require("../models/user.model.js")(sequelize, Sequelize);
 db.variable = require("./Calculator/variable")(sequelize, Sequelize);
 db.function = require("./Calculator/function")(sequelize, Sequelize);
 db.noteBlock = require("./NoteBlock/noteBlock")(sequelize, Sequelize);
+db.meteo= require("./Meteo/meteo")(sequelize, Sequelize);
+db.horoscope= require("./Horoscope/horoscope")(sequelize, Sequelize);
 
 
 module.exports = db;

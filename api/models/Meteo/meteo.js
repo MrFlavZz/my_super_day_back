@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Noteblock = sequelize.define("noteBlock", {
+    const Weather = sequelize.define("weather", {
         id: {
             type: Sequelize.INTEGER,
             primaryKey:true,
@@ -8,7 +8,7 @@ module.exports = (sequelize, Sequelize) => {
         id_users: {
             type: Sequelize.INTEGER
         },
-        value: {
+        address: {
             type: Sequelize.STRING
         },
 
@@ -17,5 +17,5 @@ module.exports = (sequelize, Sequelize) => {
         freezeTableName: true
     });
 
-    return Noteblock;
+    return Weather;
 };

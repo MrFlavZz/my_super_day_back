@@ -1,9 +1,10 @@
 var express = require("express");
 var router = express.Router();
 var fetch = require('node-fetch')
-
+const db = require("../models/index");
+const Weather = db.meteo;
 const meteoKey = process.env.METEO_KEY;
-
+const {authJwt} = require('../middleware/index');
 router.post('/getParticularTown', async function (req, res) {
 
     let address = req.body.address;
@@ -63,5 +64,67 @@ router.post('/getParticularTown', async function (req, res) {
     }
 
 })
+
+
+router.post('/getAllTown', [authJwt.verifyToken], function (req, res, next) {
+    Weather.findAll({
+        where: {
+            id_users: req.body.id_user
+        }
+    }).then((users) => {
+
+        let result = []
+        for (const elem of users) {
+            result.push({
+                name:elem.dataValues.address,
+                id: elem.dataValues.id,
+            })
+        }
+        res.send(result);
+
+
+    }).catch((e) => {
+        console.log(e)
+        res.status(500).send({message: "Erreur interne du serveur"})
+    })
+});
+
+router.post('/deleteTown', [authJwt.verifyToken], function (req, res, next) {
+    Weather.destroy({
+        where: {
+            id: req.body.id
+        }
+    }).then((users) => {
+        res.send({
+            message:"Ville supprimée"
+        })
+
+    }).catch((e) => {
+        console.log(e)
+        res.status(500).send({message: "Erreur interne du serveur"})
+    })
+});
+
+
+
+router.post('/addTown', [authJwt.verifyToken], function (req, res, next) {
+
+    Weather.create({
+        address:  req.body.address,
+        id_users: req.body.id_user,
+    }).then((data) => {
+        res.send({
+            id:data.dataValues.id,
+            message: "Nouvelle note enregistrée"
+        })
+    })
+
+        .catch(err => {
+            console.log(err)
+            res.status(500).send({message: "Erreur interne du serveur"})
+
+        });
+});
+
 
 module.exports = router
