@@ -3,68 +3,138 @@ var router = express.Router();
 var fetch = require('node-fetch')
 const db = require("../models/index");
 const {authJwt} = require('../middleware/index');
-const Horoscope=db.horoscope;
+const Horoscope = db.horoscope;
 const moment = require('moment')
 
 
-router.get('/getAllType', async function (req, res) {
+router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
 
     var today = moment().format('DD/MM/YYYY')
-    console.log(today)
+
+    function getTranslate(signe) {
+        switch (signe) {
+            case 'aries':
+                return "Bélier"
+            case 'taurus':
+                return "Taureau";
+            case 'gemini':
+                return "Gémeaux";
+            case'cancer':
+                return "Cancer";
+            case 'leo':
+                return "Lion";
+            case 'virgo':
+                return "Vierge";
+            case'libra':
+                return "Balance";
+            case'scorpio':
+                return "Scorpion";
+            case 'sagittarius':
+                return "Sagittaire";
+            default:
+                return "Erreur";
+
+        }
+
+
+    }
+
+
     Horoscope.findOne({
-        where:{
-            date : today,
+        where: {
+            date: today,
         }
     }).then(async (horoscope) => {
-
-        if(horoscope==null){
-            const signe =["aries","taurus","gemini","cancer","leo","virgo","libra","scorpio","sagittarius"];
+        console.log(horoscope)
+        if (horoscope == null) {
+            const signe = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius"];
 
             const result = await getData()
 
             async function getData() {
-                let result =[]
-                for (const elem of signe){
-                    await fetch(`http://horoscope-api.herokuapp.com/horoscope/today/${elem}`).then((res)=>{
+                let result = []
+                for (const elem of signe) {
+                    await fetch(`http://horoscope-api.herokuapp.com/horoscope/today/${elem}`).then((res) => {
                         return res.json()
-                    }).then((data)=>{
-                        result.push(data)
+                    }).then((data) => {
+                        result.push({
+                            horoscope: data.horoscope,
+                            sunsign: getTranslate(data.sunsign),
+                        })
                     })
 
                 }
                 return result
             }
-            console.log(result)
-            Horoscope.create({
-                aries:result[0].horoscope,
-                taurus: result[1].horoscope,
-                gemini: result[2].horoscope,
-                cancer: result[3].horoscope,
-                leo: result[4].horoscope,
-                virgo: result[5].horoscope,
-                libra: result[6].horoscope,
-                scorpio:result[7].horoscope,
-                sagittarius: result[8].horoscope,
-                date: today,
+
+            Horoscope.update({
+                    aries: result[0].horoscope,
+                    taurus: result[1].horoscope,
+                    gemini: result[2].horoscope,
+                    cancer: result[3].horoscope,
+                    leo: result[4].horoscope,
+                    virgo: result[5].horoscope,
+                    libra: result[6].horoscope,
+                    scorpio: result[7].horoscope,
+                    sagittarius: result[8].horoscope,
+                    date: today,
+                }, {
+                    where:{
+                      id:4
+                    },
+                }
+            ).catch((e) => {
+                console.log(e)
+                res.status(500).send({message: "Erreur interne du serveur"})
             })
 
 
-            res.send({
+            res.send(
                 result
-            });
-        }
-        else {
-            res.send({
-                horoscope : horoscope.dataValues
-            })
+            );
+        } else {
+            const result = [
+                {
+                    sunsign: "Bélier",
+                    horoscope: horoscope.dataValues.aries
+                },
+                {
+                    sunsign: "Taureau",
+                    horoscope: horoscope.dataValues.taurus
+                },
+                {
+                    sunsign: "Gémeaux",
+                    horoscope: horoscope.dataValues.gemini
+                },
+                {
+                    sunsign: "Lion",
+                    horoscope: horoscope.dataValues.leo
+                },
+                {
+                    sunsign: "Vierge",
+                    horoscope: horoscope.dataValues.virgo
+                },
+                {
+                    sunsign: "Balance",
+                    horoscope: horoscope.dataValues.libra
+                },
+                {
+                    sunsign: "Scorpion",
+                    horoscope: horoscope.dataValues.scorpio
+                },
+                {
+                    sunsign: "Sagittaire",
+                    horoscope: horoscope.dataValues.sagittarius
+                },
+            ]
+
+
+            res.send(result)
         }
     }).catch((e) => {
         console.log(e)
         res.status(500).send({message: "Erreur interne du serveur"})
     })
-
-
-
 
 
 })
