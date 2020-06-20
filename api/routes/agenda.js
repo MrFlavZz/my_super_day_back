@@ -7,6 +7,7 @@ const Agenda = db.agenda;
 /* GET home page. */
 router.post('/addEvent', [authJwt.verifyToken], function (req, res, next) {
     console.log(req.body.start)
+    console.log(req.body.end)
     Agenda.create({
         id_users: req.body.id_users,
         title: req.body.title,

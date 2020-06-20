@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
         },
         birthDate: {
-            type: Sequelize.DATE,
+            type: Sequelize.STRING,
         }
     }, {
         timestamps: false

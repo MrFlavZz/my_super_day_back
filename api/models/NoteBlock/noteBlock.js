@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-    const Noteblock = sequelize.define("noteBlock", {
+    const Noteblock = sequelize.define("noteblock", {
         id: {
             type: Sequelize.INTEGER,
             primaryKey:true,

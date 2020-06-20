@@ -15,12 +15,13 @@ exports.signup = async (req, res) => {
         birthDate: req.body.birthDate,
         homeAddress: req.body.homeAddress,
         workAddress:req.body.workAddress,
-    }).then((res)=>{
+    }).then((result)=>{
         res.send({
             message: "Compte créé"
         })
     })
         .catch(err => {
+            console.log(err)
             res.status(500).send({ message: "Erreur interne du serveur" });
         });
 
@@ -65,6 +66,7 @@ exports.signin = (req, res) => {
 
 
         }) .catch(err => {
+            console.log(err)
             res.status(500).send({ message: err.message });
         });
 };
