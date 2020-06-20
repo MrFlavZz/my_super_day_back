@@ -27,6 +27,7 @@ db.function = require("./Calculator/function")(sequelize, Sequelize);
 db.noteBlock = require("./NoteBlock/noteBlock")(sequelize, Sequelize);
 db.meteo= require("./Meteo/meteo")(sequelize, Sequelize);
 db.horoscope= require("./Horoscope/horoscope")(sequelize, Sequelize);
+db.agenda= require("./Agenda/agenda")(sequelize, Sequelize);
 
 
 module.exports = db;
