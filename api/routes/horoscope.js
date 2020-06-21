@@ -11,6 +11,7 @@ router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
 
     var today = moment().format('DD/MM/YYYY')
     const translate = new Translate();
+
     function getTranslate(signe) {
         switch (signe) {
             case 'aries':
@@ -31,6 +32,12 @@ router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
                 return "Scorpion";
             case 'sagittarius':
                 return "Sagittaire";
+            case 'aquarius':
+                return "Verseau";
+            case 'pisces':
+                return "Poisson";
+            case 'capricorn':
+                return "Capricorne";
             default:
                 return "Erreur";
 
@@ -40,15 +47,14 @@ router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
     }
 
 
-    async function tradHoroscope(text){
+    async function tradHoroscope(text) {
         let traduction = ''
         let [translations] = await translate.translate(text, "fr");
 
         translations = Array.isArray(translations) ? translations : [translations];
         translations.forEach((translation, i) => {
-            traduction=translation
+            traduction = translation
         });
-
 
 
         return traduction;
@@ -60,16 +66,16 @@ router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
         }
     }).then(async (horoscope) => {
         if (horoscope == null) {
-            const signe = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius"];
+            const signe = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius", "aquarius", "pisces", 'capricorn'];
 
             const result = await getData()
 
             async function getData() {
                 let result = []
                 for (const elem of signe) {
-                    await fetch(`http://horoscope-api.herokuapp.com/horoscope/today/${elem}`).then((res) => {
+                    await  fetch(`http://horoscope-api.herokuapp.com/horoscope/today/${elem}`).then((res) => {
                         return res.json()
-                    }).then( async (data) => {
+                    }).then(async (data) => {
 
                         result.push({
                             horoscope: await tradHoroscope(data.horoscope),
@@ -78,6 +84,8 @@ router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
                     })
 
                 }
+
+
                 return result
             }
 
@@ -91,10 +99,13 @@ router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
                     libra: result[6].horoscope,
                     scorpio: result[7].horoscope,
                     sagittarius: result[8].horoscope,
+                    aquarius: result[9].horoscope,
+                    pisces: result[10].horoscope,
+                    capricorn: result[11].horoscope,
                     date: today,
                 }, {
-                    where:{
-                      id:4
+                    where: {
+                        id: 4
                     },
                 }
             ).catch((e) => {

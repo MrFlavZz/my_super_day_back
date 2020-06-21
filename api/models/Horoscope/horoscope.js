@@ -32,6 +32,15 @@ module.exports = (sequelize, Sequelize) => {
         sagittarius: {
             type: Sequelize.STRING
         },
+        aquarius: {
+            type: Sequelize.STRING
+        },
+        pisces: {
+            type: Sequelize.STRING
+        },
+        capricorn: {
+            type: Sequelize.STRING
+        },
         date: {
             type: Sequelize.STRING
         },
