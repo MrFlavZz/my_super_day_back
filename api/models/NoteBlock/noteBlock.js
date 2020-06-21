@@ -11,6 +11,9 @@ module.exports = (sequelize, Sequelize) => {
         value: {
             type: Sequelize.STRING
         },
+        title:{
+            type: Sequelize.STRING
+        },
 
     }, {
         timestamps: false,

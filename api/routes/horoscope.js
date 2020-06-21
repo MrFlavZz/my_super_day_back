@@ -5,12 +5,12 @@ const db = require("../models/index");
 const {authJwt} = require('../middleware/index');
 const Horoscope = db.horoscope;
 const moment = require('moment')
-
+const {Translate} = require('@google-cloud/translate').v2;
 
 router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
 
     var today = moment().format('DD/MM/YYYY')
-
+    const translate = new Translate();
     function getTranslate(signe) {
         switch (signe) {
             case 'aries':
@@ -40,12 +40,25 @@ router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
     }
 
 
+    async function tradHoroscope(text){
+        let traduction = ''
+        let [translations] = await translate.translate(text, "fr");
+
+        translations = Array.isArray(translations) ? translations : [translations];
+        translations.forEach((translation, i) => {
+            traduction=translation
+        });
+
+
+
+        return traduction;
+    }
+
     Horoscope.findOne({
         where: {
             date: today,
         }
     }).then(async (horoscope) => {
-        console.log(horoscope)
         if (horoscope == null) {
             const signe = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", "scorpio", "sagittarius"];
 
@@ -56,9 +69,10 @@ router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
                 for (const elem of signe) {
                     await fetch(`http://horoscope-api.herokuapp.com/horoscope/today/${elem}`).then((res) => {
                         return res.json()
-                    }).then((data) => {
+                    }).then( async (data) => {
+
                         result.push({
-                            horoscope: data.horoscope,
+                            horoscope: await tradHoroscope(data.horoscope),
                             sunsign: getTranslate(data.sunsign),
                         })
                     })
