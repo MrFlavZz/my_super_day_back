@@ -4,6 +4,7 @@ var fetch = require('node-fetch')
 const db = require("../models");
 const User = db.user;
 const {authJwt} = require('../middleware/index');
+const Trajet = db.trajet;
 
 
 const googleKey = process.env.GOOGLE_KEY;
@@ -11,12 +12,15 @@ const googleKey = process.env.GOOGLE_KEY;
 
 router.post('/coordinate', [authJwt.verifyToken], async function (req, res) {
     let address = ''
-    if (address === "Mon domicile") {
-        User.findOne({
+    console.log(decodeURI(req.body.address))
+    if (decodeURI(req.body.address) ==="Mon domicile") {
+        console.log(req.body.address)
+       await User.findOne({
             where: {
                 id: req.body.id_user
             }
         }).then((answer) => {
+            console.log(answer)
             address = answer.dataValues.homeAddress;
         }).catch((e) => {
             console.log(e)
@@ -26,6 +30,8 @@ router.post('/coordinate', [authJwt.verifyToken], async function (req, res) {
     else {
         address = req.body.address
     }
+
+
 
 
     function getData() {
@@ -56,8 +62,38 @@ router.post('/coordinate', [authJwt.verifyToken], async function (req, res) {
 router.post('/infotrajet', [authJwt.verifyToken], async function (req, res) {
     let origin = req.body.origin;
     let destination = req.body.destination;
-    console.log(origin)
-    console.log(destination)
+    if (decodeURI(origin) ==="Mon domicile") {
+        await User.findOne({
+            where: {
+                id: req.body.id_user
+            }
+        }).then((answer) => {
+            console.log(answer)
+            origin = answer.dataValues.homeAddress;
+        }).catch((e) => {
+            console.log(e)
+            res.status(500).send({message: "Erreur interne du serveur"})
+        })
+    }
+
+    if (decodeURI(destination) ==="Mon domicile") {
+        await User.findOne({
+            where: {
+                id: req.body.id_user
+            }
+        }).then((answer) => {
+            console.log(answer)
+            destination = answer.dataValues.homeAddress;
+        }).catch((e) => {
+            console.log(e)
+            res.status(500).send({message: "Erreur interne du serveur"})
+        })
+    }
+
+
+
+
+
 
     function getData() {
         return fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${origin}&destinations=${destination}&key=${googleKey}`)
@@ -93,4 +129,25 @@ router.post('/infotrajet', [authJwt.verifyToken], async function (req, res) {
     }
 
 })
+
+router.post('/addFav', [authJwt.verifyToken], function (req, res, next) {
+
+    Trajet.create({
+        title:  req.body.title,
+        id_users: req.body.id_user,
+        value:  req.body.value
+    }).then((users) => {
+        res.send({
+            id:users.dataValues.id,
+            message: "Favori ajouté"
+        })
+    })
+
+        .catch(err => {
+            console.log(err)
+            res.status(500).send({message: "Erreur interne du serveur"})
+
+        });
+});
+
 module.exports = router

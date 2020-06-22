@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
     {
         host: config.HOST,
         dialect: config.dialect,
-        dialectOptions:config.dialectOptions,
+        //dialectOptions:config.dialectOptions,
 
         pool: {
             max: config.pool.max,
@@ -31,6 +31,8 @@ db.noteBlock = require("./NoteBlock/noteBlock")(sequelize, Sequelize);
 db.meteo= require("./Meteo/meteo")(sequelize, Sequelize);
 db.horoscope= require("./Horoscope/horoscope")(sequelize, Sequelize);
 db.agenda= require("./Agenda/agenda")(sequelize, Sequelize);
+db.trajet= require("./Trajet/trajet")(sequelize, Sequelize);
+
 
 
 module.exports = db;
