@@ -5,9 +5,9 @@ var fetch = require('node-fetch')
 const googleKey = process.env.GOOGLE_KEY;
 
 
-router.get('/coordinate',async function (req, res) {
-    let address=req.query.address;
-
+router.post('/coordinate',async function (req, res) {
+    let address=req.body.address
+    console.log(address)
 
     function getData() {
         return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleKey}`)
