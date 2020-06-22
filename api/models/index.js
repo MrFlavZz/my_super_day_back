@@ -1,3 +1,4 @@
+
 const config = require("../config/db.config.js");
 
 const Sequelize = require("sequelize");
@@ -8,6 +9,8 @@ const sequelize = new Sequelize(
     {
         host: config.HOST,
         dialect: config.dialect,
+        dialectOptions:config.dialectOptions,
+
         pool: {
             max: config.pool.max,
             min: config.pool.min,

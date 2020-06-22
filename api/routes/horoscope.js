@@ -151,6 +151,18 @@ router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
                     sunsign: "Sagittaire",
                     horoscope: horoscope.dataValues.sagittarius
                 },
+                {
+                    sunsign: "Poisson",
+                    horoscope: horoscope.dataValues.pisces
+                },
+                {
+                    sunsign: "Capricorne",
+                    horoscope: horoscope.dataValues.capricorn
+                },
+                {
+                    sunsign: "Verseau",
+                    horoscope: horoscope.dataValues.aquarius
+                },
             ]
 
 
