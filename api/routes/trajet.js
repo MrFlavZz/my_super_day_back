@@ -12,26 +12,23 @@ const googleKey = process.env.GOOGLE_KEY;
 
 router.post('/coordinate', [authJwt.verifyToken], async function (req, res) {
     let address = ''
-    console.log(decodeURI(req.body.address))
-    if (decodeURI(req.body.address) ==="Mon domicile") {
-        console.log(req.body.address)
-       await User.findOne({
-            where: {
-                id: req.body.id_user
-            }
-        }).then((answer) => {
-            console.log(answer)
-            address = answer.dataValues.homeAddress;
-        }).catch((e) => {
-            console.log(e)
-            res.status(500).send({message: "Erreur interne du serveur"})
-        })
-    }
-    else {
-        address = req.body.address
-    }
 
+    await Trajet.findOne({
+        where: {
+            title: req.body.address,
+            id_users: req.body.id_user
+        }
+    }).then((answer) => {
+        if (answer !== null) {
+            address = answer.dataValues.value
+        } else {
+            address = req.body.address;
+        }
 
+    }).catch((e) => {
+        console.log(e)
+        res.status(500).send({message: "Erreur interne du serveur"})
+    })
 
 
     function getData() {
@@ -60,37 +57,46 @@ router.post('/coordinate', [authJwt.verifyToken], async function (req, res) {
 })
 
 router.post('/infotrajet', [authJwt.verifyToken], async function (req, res) {
-    let origin = req.body.origin;
-    let destination = req.body.destination;
-    if (decodeURI(origin) ==="Mon domicile") {
-        await User.findOne({
-            where: {
-                id: req.body.id_user
-            }
-        }).then((answer) => {
-            console.log(answer)
-            origin = answer.dataValues.homeAddress;
-        }).catch((e) => {
-            console.log(e)
-            res.status(500).send({message: "Erreur interne du serveur"})
-        })
-    }
-
-    if (decodeURI(destination) ==="Mon domicile") {
-        await User.findOne({
-            where: {
-                id: req.body.id_user
-            }
-        }).then((answer) => {
-            console.log(answer)
-            destination = answer.dataValues.homeAddress;
-        }).catch((e) => {
-            console.log(e)
-            res.status(500).send({message: "Erreur interne du serveur"})
-        })
-    }
+    let origin = '';
+    let destination = '';
 
 
+
+    await Trajet.findOne({
+        where: {
+            title: req.body.origin,
+            id_users: req.body.id_user
+        }
+    }).then((answer) => {
+
+        if (answer !== null) {
+            origin = answer.dataValues.value
+        } else {
+            origin = req.body.origin;
+        }
+
+    }).catch((e) => {
+        console.log(e)
+        res.status(500).send({message: "Erreur interne du serveur"})
+    })
+
+
+    await Trajet.findOne({
+        where: {
+            title: req.body.destination,
+            id_users: req.body.id_user
+        }
+    }).then((answer) => {
+        console.log(answer)
+        if (answer !== null) {
+            destination = answer.dataValues.value
+        } else {
+            destination = req.body.destination;
+        }
+    }).catch((e) => {
+        console.log(e)
+        res.status(500).send({message: "Erreur interne du serveur"})
+    })
 
 
 
@@ -133,16 +139,39 @@ router.post('/infotrajet', [authJwt.verifyToken], async function (req, res) {
 router.post('/addFav', [authJwt.verifyToken], function (req, res, next) {
 
     Trajet.create({
-        title:  req.body.title,
+        title: req.body.title,
         id_users: req.body.id_user,
-        value:  req.body.value
+        value: req.body.value
     }).then((users) => {
         res.send({
-            id:users.dataValues.id,
+            id: users.dataValues.id,
             message: "Favori ajouté"
         })
     })
 
+        .catch(err => {
+            console.log(err)
+            res.status(500).send({message: "Erreur interne du serveur"})
+
+        });
+});
+
+router.post('/getFav', [authJwt.verifyToken], function (req, res, next) {
+
+    Trajet.findAll({
+        where: {
+            id_users: req.body.id_users
+        }
+    }).then((traj) => {
+        let result = []
+        for (const elem of traj) {
+            result.push({
+                title: elem.dataValues.title,
+            })
+        }
+        res.send(result);
+
+    })
         .catch(err => {
             console.log(err)
             res.status(500).send({message: "Erreur interne du serveur"})

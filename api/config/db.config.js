@@ -2,7 +2,7 @@ module.exports = {
     HOST: "localhost",
     USER: "root",
     PASSWORD: "",
-    DB: "mysuperday",
+    DB: "test",
     dialect: "mysql",
     /*dialectOptions : {
         socketPath : "/srv/run/mysqld/mysqld.sock"
