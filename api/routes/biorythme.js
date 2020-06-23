@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const {authJwt} = require('../middleware/index');
 const db = require("../models/index");
-
+var moment = require('moment');
 const User = db.user;
 
 /* GET home page. */
@@ -17,12 +17,12 @@ router.post('/getNumberDaySinceBirth', [authJwt.verifyToken], function (req, res
 
 
 
-        const oneDay = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
-        const firstDate = new Date();
 
-        const secondDate = new Date(users.dataValues.birthDate);
+        const firstDate = moment().format("YYYYMMDD");
 
-        const diffDays = Math.round(Math.abs((firstDate - secondDate) / oneDay));
+        const secondDate = moment(new Date(decodeURI( users.dataValues.birthDate))).format("YYYYMMDD")
+
+        const diffDays =moment(firstDate).diff(moment(secondDate),'days')
 
 
         res.send({
