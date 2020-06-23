@@ -163,6 +163,10 @@ router.post('/getAllType', [authJwt.verifyToken], async function (req, res) {
                     sunsign: "Verseau",
                     horoscope: horoscope.dataValues.aquarius
                 },
+                {
+                    sunsign: "Cancer",
+                    horoscope: horoscope.dataValues.cancer
+                },
             ]
 
 
