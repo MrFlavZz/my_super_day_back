@@ -12,7 +12,7 @@ const googleKey = process.env.GOOGLE_KEY;
 
 router.post('/coordinate', [authJwt.verifyToken], async function (req, res) {
     let address = ''
-
+    console.log(req.body.address)
     await Trajet.findOne({
         where: {
             title: req.body.address,
@@ -32,13 +32,17 @@ router.post('/coordinate', [authJwt.verifyToken], async function (req, res) {
 
 
     function getData() {
-        return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleKey}`)
+
+        return fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleKey}`).catch((e) => {
+            res.status(500).send({message: "Erreur interne du serveur"})
+        })
     }
 
     const processData = async () => {
 
         const dataGetter = await getData()
         const responseData = await dataGetter.json()
+
         let data = {
             latitude: responseData.results[0].geometry.location.lat,
 
@@ -83,11 +87,11 @@ router.post('/infotrajet', [authJwt.verifyToken], async function (req, res) {
 
     await Trajet.findOne({
         where: {
-            title: req.body.destination,
+            title:  req.body.destination,
             id_users: req.body.id_user
         }
     }).then((answer) => {
-        console.log(answer)
+
         if (answer !== null) {
             destination = answer.dataValues.value
         } else {
@@ -102,30 +106,44 @@ router.post('/infotrajet', [authJwt.verifyToken], async function (req, res) {
 
 
     function getData() {
-        return fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${origin}&destinations=${destination}&key=${googleKey}`)
+        console.log(origin)
+        return fetch(`https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=${ origin}&destinations=${destination}&key=${googleKey}`).catch((e) => {
+            res.status(500).send({message: "Erreur interne du serveur"})
+        })
     }
 
     const processData = async () => {
         const dataGetter = await getData()
         const responseData = await dataGetter.json()
-        let data = {
-            origin: responseData.origin_addresses[0],
-            destination: responseData.destination_addresses[0],
 
-            itinerary: {
-                distance: {
-                    value: responseData.rows[0].elements[0].distance.value,
-                    text: responseData.rows[0].elements[0].distance.text,
 
+
+        if(responseData.rows[0].elements[0].distance===undefined){
+            await res.sendStatus(409)
+        }
+        else {
+            let data = {
+                origin: responseData.origin_addresses[0],
+                destination: responseData.destination_addresses[0],
+
+                itinerary: {
+                    distance: {
+                        value: responseData.rows[0].elements[0].distance.value,
+                        text: responseData.rows[0].elements[0].distance.text,
+
+                    },
+                    duration: {
+                        value: responseData.rows[0].elements[0].duration.value,
+                        text: responseData.rows[0].elements[0].duration.text,
+
+                    },
                 },
-                duration: {
-                    value: responseData.rows[0].elements[0].duration.value,
-                    text: responseData.rows[0].elements[0].duration.text,
+            };
+            await res.json(data)
+        }
 
-                },
-            },
-        };
-        await res.json(data)
+
+
     }
     if (origin === undefined || destination === undefined) {
         res.status(404);
@@ -139,9 +157,9 @@ router.post('/infotrajet', [authJwt.verifyToken], async function (req, res) {
 router.post('/addFav', [authJwt.verifyToken], function (req, res, next) {
 
     Trajet.create({
-        title: req.body.title,
+        title: encodeURI(req.body.title),
         id_users: req.body.id_user,
-        value: req.body.value
+        value: encodeURI(req.body.value),
     }).then((users) => {
         res.send({
             id: users.dataValues.id,
@@ -166,7 +184,7 @@ router.post('/getFav', [authJwt.verifyToken], function (req, res, next) {
         let result = []
         for (const elem of traj) {
             result.push({
-                title: elem.dataValues.title,
+                title: decodeURI( elem.dataValues.title),
             })
         }
         res.send(result);
