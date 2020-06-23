@@ -5,28 +5,50 @@ const db = require("../models/index");
 const Weather = db.meteo;
 const meteoKey = process.env.METEO_KEY;
 const {authJwt} = require('../middleware/index');
-router.post('/getParticularTown', async function (req, res) {
+const googleKey = process.env.GOOGLE_KEY;
+
+router.post('/getParticularTown', [authJwt.verifyToken], async function (req, res) {
 
     let address = req.body.address;
     let lat = ""
     let lng = ""
 
+
+
+    async function getDataPos() {
+
+        const dataGetter = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleKey}`).catch((e) => {
+            console.log(e)
+            res.status(500).send({message: "Erreur interne du serveur"})
+        })
+        const responseData = await dataGetter.json()
+        let data = {
+            latitude: responseData.results[0].geometry.location.lat,
+
+            longitude: responseData.results[0].geometry.location.lng
+        };
+        return data
+    }
+
+
+
     async function getData() {
 
+        let data = await getDataPos()
 
-        const getter = await fetch(encodeURI(`https://bdoalex.com/mysuperday/api/trajet/coordinate?address=${address}`))
+        lat = data.latitude;
+        lng = data.longitude;
 
-        const response = await getter.json()
-
-        lat = response.latitude;
-        lng = response.longitude;
-
-        return fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&&appid=${meteoKey}`)
+        return fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lng}&units=metric&&appid=${meteoKey}`).then((res)=>{
+            return res.json()
+        }).catch((e) => {
+            res.status(500).send({message: "Erreur interne du serveur"})
+        })
     }
 
     const processData = async () => {
-        const dataGetter = await getData()
-        const responseData = await dataGetter.json()
+
+        const responseData = await getData()
 
 
         let data = {
@@ -52,14 +74,14 @@ router.post('/getParticularTown', async function (req, res) {
 
 
         }
-
-        await res.json(data)
+        console.log(data)
+         res.json(data)
     }
 
     if (address === undefined) {
         res.send(404);
     } else {
-        await processData()
+         processData()
         res.end
     }
 
